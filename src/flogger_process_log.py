@@ -135,7 +135,7 @@ def process_log (cursor, db, settings):
         data = cursor.fetchone()
         take_off_coords = (data[0], data[1])
         airfield_coords = (settings.FLOGGER_LATITUDE, settings.FLOGGER_LONGITUDE)
-        print "Takeoff from: ", take_off_coords, " Airfield at: ", airfield_coords
+        print "Flight No: ", row[9], " Takeoff from: ", take_off_coords, " Airfield at: ", airfield_coords
         dist =  vincenty(take_off_coords, airfield_coords).km
         if dist > 2:
             print "Take off outside 2km radius of airfield location, hence not from here, omit"
