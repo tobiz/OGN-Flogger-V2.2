@@ -80,7 +80,8 @@ print "Setup Ui_Window"
 
 
 
-Ui_MainWindow, base_class = uic.loadUiType(path_join_dd(os.path.abspath(__file__), ["data", "flogger.ui"]))
+#Ui_MainWindow, base_class = uic.loadUiType(path_join_dd(os.path.abspath(__file__), ["data", "flogger.ui"]))
+Ui_MainWindow, base_class = uic.loadUiType(path_join_dd(os.path.abspath(__file__), ["data", "flogger-v1.2.ui"]))
 Ui_AboutWindow, base_class = uic.loadUiType(path_join_dd(os.path.abspath(__file__), ["data", "flogger_about.ui"]))
 Ui_HelpWindow, base_class = uic.loadUiType(path_join_dd(os.path.abspath(__file__), ["data", "flogger_help.ui"]))
 #Ui_HelpWindow, base_class = uic.loadUiType(path_join_dd(os.path.abspath(__file__), ["data", "flogger_config.ui"]))
@@ -202,12 +203,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         
 #        self.RunningLabel.setText("Stopped")
+
 #        self.iconpath = os.path.join(path, "../data/flogger_icon-08.png")
-        self.iconpath = path_join_dd(os.path.abspath(__file__),["data", "flogger_icon-08.png"])
-        print "Icon path: ", self.iconpath
-        self.setWindowIcon(QtGui.QIcon(self.iconpath))
-        self.pixmap = QPixmap(self.iconpath)
-        self.Iconlabel.setPixmap(self.pixmap) 
+#        self.iconpath = path_join_dd(os.path.abspath(__file__),["data", "flogger_icon-08.png"])
+#        print "Icon path: ", self.iconpath
+#        self.setWindowIcon(QtGui.QIcon(self.iconpath))
+#        self.pixmap = QPixmap(self.iconpath)
+#        self.Iconlabel.setPixmap(self.pixmap) 
         
         self.actionStart.triggered.connect(self.floggerStart)  
         self.actionStop.triggered.connect(self.floggerStop)  
