@@ -63,7 +63,7 @@ def get_coords(address, settings):
     #
     # Below here doesn't work any more
     #
-    ele = geocoder.google([lat, lng], method='elevation')
+    ele = geocoder.google([lat, lng], method='elevation') 
     print address, " Elevation is: ", ele.meters
     try:
         geolocator = Nominatim(user_agent="OGN_Flogger")
