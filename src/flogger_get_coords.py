@@ -50,7 +50,8 @@ def get_coords(address, settings):
 #    lat = str(54.2289539)
     lng = str(lng)
     lat = str(lat)
-    url = "https://elevation-api.io/api/elevation?points=(" + lat + "," + lng
+#    url = "https://elevation-api.io/api/elevation?points=(" + lat + "," + lng
+    url = "https://elevation-api.io/api/elevation?points=(" + lat + "," + lng + ")"
     print "url string is: ", url
     jsondata = requests.get(str(url))
     x = json.loads(jsondata.text)
