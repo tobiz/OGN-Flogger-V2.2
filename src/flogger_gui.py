@@ -1293,6 +1293,18 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             print "Failed to connect to db"
         try:
             cursor.execute("SELECT flight_no, sdate, stime, etime, duration, src_callsign, max_altitude, registration, track_file_name, tug_registration, tug_altitude, tug_model  FROM flights WHERE sdate=? ORDER BY stime DESC", (date,))
+            # row[0] = flight_no, 
+            # row[1] = sdate, 
+            # row[2] = stime, 
+            # row[3] = etime, 
+            # row[4] = duration, 
+            # row[5] = src_callsign, 
+            # row[6] = max_altitude, 
+            # row[7] = registration, 
+            # row[8] = track_file_name, 
+            # row[9] = tug_registration, 
+            # row[10] = tug_altitude, 
+            # row[11] = tug_model 
         except:
             print "Select failed"
         rows = cursor.fetchall()
@@ -1320,8 +1332,16 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             except KeyError:
                 print "Glider not in Fleet hence not a tug: ", row[7]                        
             self.FlightLogTable.insertRow(rowPosition)   
-            if row[9] is None:
-                val = "----"
+#            if row[9] is None: 
+            if row[9] is None and row[10] is None and row[11] is None:
+                # Check if it's a motor glider
+                if settings.FLOGGER_FLEET_LIST[row[7]] > 200 and \
+                    settings.FLOGGER_FLEET_LIST[row[7]] <= 300:
+                    # It is so blanks
+                    val = "----"
+                else:
+                    # Must be a winch launch
+                    val = "Winch"
             else:
                 val = row[9]
             self.FlightLogTable.setItem(rowPosition , 0, QtGui.QTableWidgetItem(val))           # Tug Reg
