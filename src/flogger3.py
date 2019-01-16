@@ -147,6 +147,7 @@ from threading import Thread
 from flogger_aprs_parser import  *
 from flogger_process_log import *
 from flogger_path_join import *
+from flogger_test_sunset import *
 #
 # This added to make it simpler after going to gui version
 #
@@ -896,6 +897,10 @@ class flogger3(MyApp):
         i = 0
         try:
 #            while 1:
+            check = init_sunset(settings.FLOGGER_LATITUDE, \
+                                settings.FLOGGER_LONGITUDE,  \
+                                settings.FLOGGER_QNH,       \
+                                settings.FLOGGER_LOCATION_HORIZON)
             while settings.FLOGGER_RUN:
                 print "FLOGGER_RUN: ", settings.FLOGGER_RUN
         #     for i in range(1000000):
@@ -919,12 +924,20 @@ class flogger3(MyApp):
 #                print "Just for testing aprs_parse"
 #                daylight = True
 #                if daylight:
-                if s.alt > twilight:
-                    print "Is it light at Location? Yes", location, " Ephem date is: ", ephem.Date(location.date), " Next sunset at: ", location.next_setting(ephem.Sun())
+
+                if not check.is_sun_set_now():
+                    print "Is sun set at Location? No"
                 else:
-                    print "Is it light at Location? No", location, " Ephem date is: ", ephem.Date(location.date), " Next sunrise at: ", location.next_rising(ephem.Sun())
+                    print "Is sun set at Location? Yes. Process Log"
                     process_log(cursor,db, settings)
-        
+                    
+#                print "Run old daylight tes"    
+#                if s.alt > twilight:
+#                    print "Is it light at Location? Yes", location, " Ephem date is: ", ephem.Date(location.date), " Next sunset at: ", location.next_setting(ephem.Sun())
+#                else:
+#                    print "Is it light at Location? No", location, " Ephem date is: ", ephem.Date(location.date), " Next sunrise at: ", location.next_rising(ephem.Sun())
+#                    process_log(cursor,db, settings)
+                
         #
         # Dump tracks from flights table as .gpx
         # This updates each flight in flights table with trackfile name

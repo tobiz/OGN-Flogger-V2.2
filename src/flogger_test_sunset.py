@@ -1,3 +1,4 @@
+
 import ephem
 import datetime
 import pytz
@@ -12,7 +13,7 @@ import pytz
 
 class init_sunset():
 	def __init__(self, lat, lon, elv, USN_adj):	
-		#print "init check_sunset"
+		print "init check_sunset"
 		self.dtnow      = ephem.Observer()
 		self.dtnow.lon  = str(lon) 		#Note that lon should be in string format
 		self.dtnow.lat  = str(lat)      	#Note that lat should be in string format
@@ -22,21 +23,21 @@ class init_sunset():
 		self.dtnow.horizon = str(USN_adj)
 	def is_sun_set_now(self):
 		self.dtnow.date = pytz.utc.localize(datetime.datetime.utcnow())	# Datetime Now
-		self.sunset_nxt =self.dtnow.next_setting(ephem.Sun())					# Datetime next sunset Now
+		self.sunset_nxt = self.dtnow.next_setting(ephem.Sun())					# Datetime next sunset Now
 		self.nowdate = datetime.datetime.strptime(str(self.dtnow.date), "%Y/%m/%d %H:%M:%S").date()
 		self.ssdate = datetime.datetime.strptime(str(self.sunset_nxt), "%Y/%m/%d %H:%M:%S").date()
 		print "nowdate1 is: ", self.nowdate 
 		print "ssdate1 is: ", self.ssdate
 		if self.ssdate > self.nowdate:
-			print "Sunset date for next day, hence sun has set"
+			print "Sunset date for next day, hence sun has set for today"
 			return True
 		else:
 			print "Sun has not set yet for today: ", self.nowdate
 			return False
 			
-check = init_sunset(54.2289592, -1.20928758608, 238.25, "-0:34")
-issunset = check.is_sun_set_now()
-print "Is sun set now?: ", issunset
+#check = init_sunset(54.2289592, -1.20928758608, 238.25, "-0:34")
+#issunset = check.is_sun_set_now()
+#print "Is sun set now?: ", issunset
 		
 		
 		

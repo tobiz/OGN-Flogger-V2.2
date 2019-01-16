@@ -1322,7 +1322,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.FlightLogTable.setColumnHidden(10, True)
 #        row_count = 1
         for row in rows:  
-#            print "Row: ", row_count 
+#            print "Row: ", row_count
+            in_fleet = True 
             try:
                 if settings.FLOGGER_FLEET_LIST[row[7]] > 100 and \
                     settings.FLOGGER_FLEET_LIST[row[7]] <= 200 and \
@@ -1330,18 +1331,20 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                     print "Tug only flight so ignore tug: ", row[7]
                     continue
             except KeyError:
-                print "Glider not in Fleet hence not a tug: ", row[7]                        
+                print "Glider not in Fleet hence not a tug: ", row[7] 
+                in_fleet = False                       
             self.FlightLogTable.insertRow(rowPosition)   
 #            if row[9] is None: 
             if row[9] is None and row[10] is None and row[11] is None:
-                # Check if it's a motor glider
-                if settings.FLOGGER_FLEET_LIST[row[7]] > 200 and \
-                    settings.FLOGGER_FLEET_LIST[row[7]] <= 300:
-                    # It is so blanks
-                    val = "----"
-                else:
-                    # Must be a winch launch
-                    val = "Winch"
+                # Check if it's in the fleet?
+                if in_fleet:
+                    # Is it a motor glider?
+                    if settings.FLOGGER_FLEET_LIST[row[7]] > 200 and \
+                        settings.FLOGGER_FLEET_LIST[row[7]] <= 300:
+                        # It is so blanks
+                        val = "----"
+                # Must be a winch launch of glider, ie non-motor glider or non-fleet glider, but may be self launcher??
+                val = "Winch"
             else:
                 val = row[9]
             self.FlightLogTable.setItem(rowPosition , 0, QtGui.QTableWidgetItem(val))           # Tug Reg
