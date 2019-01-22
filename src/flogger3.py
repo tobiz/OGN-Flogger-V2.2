@@ -811,14 +811,31 @@ class flogger3(MyApp):
         
         location.lat = settings.FLOGGER_LATITUDE
         location.lon = settings.FLOGGER_LONGITUDE
+        location.elevation = settings.FLOGGER_QNH
         
         print "Location for ephem is: ", settings.FLOGGER_AIRFIELD_DETAILS, " latitude: ", location.lat, " longitude: ", location.lon, " elevation: ", settings.FLOGGER_QNH   
         
         date = datetime.datetime.now()
-        next_sunrise = location.next_rising(ephem.Sun(), date)
-        next_sunset = location.next_setting(ephem.Sun(), date)
-        print "Sunrise today: ", date, " is: ", next_sunrise
-        print "Sunset today: ", date, " is: ", next_sunset
+        print "Datetime now is: ", date
+        
+        
+        
+        
+        
+#        next_sunrise = location.next_rising(ephem.Sun(), date)
+#        next_sunset = location.next_setting(ephem.Sun(), date)
+#        print "Sunrise today: ", date, " is: ", next_sunrise
+#        print "Sunset today: ", date, " is: ", next_sunset
+        
+#        log_datetime = datetime.datetime.now() + datetime.timedelta(hours=int(settings.FLOGGER_LOG_TIME_DELTA))
+#        print "Log datetime is: ", log_datetime
+        
+#        location.date = ephem.Date(log_datetime)
+        location.date = ephem.Date(datetime.datetime.now())
+        print "Ephem date is: ", location.date, "Location is: ", location
+        sun = ephem.Sun()
+        sun.compute(location)
+        twilight = -6 * ephem.degree    # Defn of Twilight is: Centre of Sun is 6, 12, 18 degrees below horizon (civil, nautical, astronomical)  
             
         #    
         #-----------------------------------------------------------------
@@ -897,30 +914,33 @@ class flogger3(MyApp):
         
         i = 0
         try:
-#            while 1:
-#            check = init_sunset(settings.FLOGGER_LATITUDE, \
-#                                settings.FLOGGER_LONGITUDE,  \
-#                                settings.FLOGGER_QNH,       \
-#                                settings.FLOGGER_LOCATION_HORIZON)
             while settings.FLOGGER_RUN:
                 print "FLOGGER_RUN: ", settings.FLOGGER_RUN
         #     for i in range(1000000):
                 i = i + 1
                 datetime_now = datetime.datetime.now()
-                previous_sunrise = location.previous_rising(ephem.Sun(), date).datetime()
-                next_sunrise = location.next_rising(ephem.Sun(), date).datetime()
-                previous_sunset = location.previous_setting(ephem.Sun(), date).datetime()
-                next_sunset = location.next_setting(ephem.Sun(), date).datetime()
+#                previous_sunrise = location.previous_rising(ephem.Sun(), date).datetime()
+#                next_sunrise = location.next_rising(ephem.Sun(), date).datetime()
+#                previous_sunset = location.previous_setting(ephem.Sun(), date).datetime()
+#                next_sunset = location.next_setting(ephem.Sun(), date).datetime()
                 # Set datetime to current time + FLOGGER_LOG_TIME_DELTA to start processing flight log 
                 # that number of hours before sunset
 #                log_datetime = datetime.datetime.now() + datetime.timedelta(hours=settings.FLOGGER_LOG_TIME_DELTA)
-                log_datetime = datetime.datetime.now() + datetime.timedelta(hours=int(settings.FLOGGER_LOG_TIME_DELTA))
+#
+# Old way start
+#
+#                log_datetime = datetime.datetime.now() + datetime.timedelta(hours=int(settings.FLOGGER_LOG_TIME_DELTA))
         #        print "Log datetime is: ", log_datetime
-                location.date = ephem.Date(log_datetime)
-                print "Ephem date is: ", location.date
-                s = ephem.Sun()
-                s.compute(location)
-                twilight = -6 * ephem.degree    # Defn of Twilight is: Centre of Sun is 6, 12, 18 degrees below horizon (civil, nautical, astronomical)  
+#                location.date = ephem.Date(log_datetime)
+#                print "Ephem date is: ", location.date
+#                s = ephem.Sun()
+#                s.compute(location)
+#                twilight = -6 * ephem.degree    # Defn of Twilight is: Centre of Sun is 6, 12, 18 degrees below horizon (civil, nautical, astronomical)
+
+#
+# Old way end
+# 
+ 
 #               daylight = s.alt > twilight
 #                print "Just for testing aprs_parse"
 #                daylight = True
@@ -931,12 +951,33 @@ class flogger3(MyApp):
 #                else:
 #                    print "Is sun set at Location? Yes. Process Log"
 #                    process_log(cursor,db, settings)
+ 
+#
+# Old way start
+#
                     
-                print "Run old daylight test"    
-                if s.alt > twilight:
-                    print "Is it light at Location? Yes", location, " Ephem date is: ", ephem.Date(location.date), " Next sunset at: ", location.next_setting(ephem.Sun())
+#                print "Run old daylight test"    
+#                if s.alt > twilight:
+#                    print "Is it light at Location? Yes", location, " Ephem date is: ", ephem.Date(location.date), " Next sunset at: ", location.next_setting(ephem.Sun())
+#                else:
+#                    print "Is it light at Location? No", location, " Ephem date is: ", ephem.Date(location.date), " Next sunrise at: ", location.next_rising(ephem.Sun())
+#                    process_log(cursor,db, settings)
+
+#
+# Old way end
+#
+                    
+#                print "Run old daylight test" 
+                print "sun altitude is (degrees): ", sun.alt, "twilight altitude is: ", twilight   
+                if sun.alt > twilight:
+                    print "Is it light at Location? Yes", location, \
+                    " Ephem date is: ", ephem.Date(location.date), \
+                    " Next sunset at: ", location.next_setting(ephem.Sun())
                 else:
-                    print "Is it light at Location? No", location, " Ephem date is: ", ephem.Date(location.date), " Next sunrise at: ", location.next_rising(ephem.Sun())
+#                    print "Is it light at Location? No", location, \
+                    print "Is it light at Location? No", \
+                    " Ephem date is: ", ephem.Date(location.date), \
+                    " Next sunrise at: ", location.next_rising(ephem.Sun())
                     process_log(cursor,db, settings)
                 
         #
