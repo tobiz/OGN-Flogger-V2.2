@@ -918,7 +918,9 @@ class flogger3(MyApp):
                 print "FLOGGER_RUN: ", settings.FLOGGER_RUN
         #     for i in range(1000000):
                 i = i + 1
-                datetime_now = datetime.datetime.now()
+                #datetime_now = datetime.datetime.now()
+                location.date = ephem.Date(datetime.datetime.now())
+                print "Ephem date is now: ", location.date, "Location is: ", location
 #                previous_sunrise = location.previous_rising(ephem.Sun(), date).datetime()
 #                next_sunrise = location.next_rising(ephem.Sun(), date).datetime()
 #                previous_sunset = location.previous_setting(ephem.Sun(), date).datetime()
