@@ -45,14 +45,7 @@ try:
     pyrcc4_cmd = "pyrcc4 -o "
 #    pyrcc4_out = os.path.join(path,"flogger_resources_rc.py")
     pyrcc4_out = path_join(path, ["flogger_resources_rc.py"])
-#    pyrcc4_in = os.path.join(path,"../data/flogger_resources.qrc")
-#    pyrcc4_in = os.path.join(os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir), "data"), "flogger_resources.qrc")
-#    p1 = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir)
-#    print "p1: ", p1
-#    pyrcc4_in = path_join(p1, ["data", "flogger_resources.qrc"])
     pyrcc4_in = path_join_dd(os.path.abspath(__file__), ["data", "flogger_resources.qrc"])
-    
-#    pyrcc4_in = path_join((os.path.dirname(os.path.abspath(__file__)), os.pardir), ["data", "flogger_resources.qrc"])
     print "pyrcc4_in: ", pyrcc4_in
     print "pyrcc4_out: ", pyrcc4_out
     pyrcc4_cmd = "pyrcc4 -o %s %s" % (pyrcc4_out, pyrcc4_in)
@@ -67,18 +60,7 @@ try:
 except:
     print "failed to compile resources"
     exit()
-#Ui_MainWindow, base_class = uic.loadUiType(os.path.join(path,"flogger.ui"))
-#Ui_AboutWindow, base_class = uic.loadUiType(os.path.join(path,"flogger_about.ui"))
-#Ui_HelpWindow, base_class = uic.loadUiType(os.path.join(path,"flogger_help.ui"))
-#path_join_dd(os.path.abspath(__file__), ["data", "flogger_ui"])
-#path_join_dd(os.path.abspath(__file__), ["data", "flogger_about.ui"])
-#path_join_dd(os.path.abspath(__file__), ["data", "flogger_help.ui"])
 print "Setup Ui_Window"
-#Ui_MainWindow, base_class = uic.loadUiType(os.path.join(path,"../data/flogger.ui"))
-#Ui_AboutWindow, base_class = uic.loadUiType(os.path.join(path,"../data/flogger_about.ui"))
-#Ui_HelpWindow, base_class = uic.loadUiType(os.path.join(path,"../data/flogger_help.ui"))
-
-
 
 #Ui_MainWindow, base_class = uic.loadUiType(path_join_dd(os.path.abspath(__file__), ["data", "flogger.ui"]))
 Ui_MainWindow, base_class = uic.loadUiType(path_join_dd(os.path.abspath(__file__), ["data", "flogger-v1.2.ui"]))
