@@ -1343,8 +1343,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
                         settings.FLOGGER_FLEET_LIST[row[7]] <= 300:
                         # It is so blanks
                         val = "----"
-                # Must be a winch launch of glider, ie non-motor glider or non-fleet glider, but may be self launcher??
-                val = "Winch"
+                    else:
+                        # Must be a winch launch of glider, ie non-motor glider or non-fleet glider, but may be self launcher??
+                        val = "Winch"
             else:
                 val = row[9]
             self.FlightLogTable.setItem(rowPosition , 0, QtGui.QTableWidgetItem(val))           # Tug Reg

@@ -818,6 +818,9 @@ class flogger3(MyApp):
         date = datetime.datetime.now()
         print "Datetime now is: ", date
         
+        sunset_test = init_sunset_test(location)
+        
+        
         
         
         
@@ -919,8 +922,8 @@ class flogger3(MyApp):
         #     for i in range(1000000):
                 i = i + 1
                 #datetime_now = datetime.datetime.now()
-                location.date = ephem.Date(datetime.datetime.now())
-                print "Ephem date is now: ", location.date, "Location is: ", location
+#                location.date = ephem.Date(datetime.datetime.now())
+#                print "Ephem date is now: ", location.date, "Location is: ", location
 #                previous_sunrise = location.previous_rising(ephem.Sun(), date).datetime()
 #                next_sunrise = location.next_rising(ephem.Sun(), date).datetime()
 #                previous_sunset = location.previous_setting(ephem.Sun(), date).datetime()
@@ -931,14 +934,19 @@ class flogger3(MyApp):
 #
 # Old way start
 #
-#                log_datetime = datetime.datetime.now() + datetime.timedelta(hours=int(settings.FLOGGER_LOG_TIME_DELTA))
-        #        print "Log datetime is: ", log_datetime
-#                location.date = ephem.Date(log_datetime)
-#                print "Ephem date is: ", location.date
-#                s = ephem.Sun()
-#                s.compute(location)
-#                twilight = -6 * ephem.degree    # Defn of Twilight is: Centre of Sun is 6, 12, 18 degrees below horizon (civil, nautical, astronomical)
+                log_datetime = datetime.datetime.now() + datetime.timedelta(hours=int(settings.FLOGGER_LOG_TIME_DELTA))
+                print "Log datetime is: ", log_datetime
+                location.date = ephem.Date(log_datetime)
+                print "Ephem date is, old way: ", location.date
+                sun = ephem.Sun()
+                sun.compute(location)
+                twilight = -6 * ephem.degree    # Defn of Twilight is: Centre of Sun is 6, 12, 18 degrees below horizon (civil, nautical, astronomical)
 
+
+                if sunset_test.is_sunset_now(location):
+                    print "New sunset test True"
+                else:
+                    print "New sunset test False"
 #
 # Old way end
 # 
