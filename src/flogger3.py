@@ -148,24 +148,24 @@ from flogger_aprs_parser import  *
 from flogger_process_log import *
 from flogger_path_join import *
 from flogger_test_sunset import *
-#import flogger_test_sunset
+from PyQt4.QtCore import QObject, pyqtSignal
 #
 # This added to make it simpler after going to gui version
 #
 global settings
 
-class flogger3(MyApp):
+#class flogger3(MyApp):
+class flogger3():
     
     def __init__(self, interval=1):
         print "init flogger3"
         print "flogger3 initialized"
         return
     
-    def flogger_run(self, settings):
+#1    def flogger_run(self, settings):
+    def flogger_run(self, settings, flogger):
         print "flogger_run called"
         print "settings.FLOGGER_SMTP_SERVER_URL: ", settings.FLOGGER_SMTP_SERVER_URL
-#        print "settings.FLOGGER_SMTP_SERVER_PORT: ", settings.FLOGGER_SMTP_SERVER_PORT
-#        print "settings.FLOGGER_DB_SCHEMA: ", settings.FLOGGER_DB_SCHEMA
         self.thread = Thread(target=self.flogger_start, name= "flogger", args=(settings,))
         print "Thread setup"
         self.thread.daemon = True                            # Daemonize thread
@@ -915,6 +915,32 @@ class flogger3(MyApp):
         #-----------------------------------------------------------------
         #
         
+        #    
+        #-----------------------------------------------------------------
+        # Initialise sunset time computation and checking
+        #-----------------------------------------------------------------
+        #
+        
+        check_sunset = init_sunset_test(location)
+        
+        #    
+        #-----------------------------------------------------------------
+        # The following shouldn't be done like this since there are 2 threads running,
+        # the processing thread and the gui thread.  Therefore to change the state of anything in the
+        # gui thread the processing thread should send a signal to the gui thread which should accept the
+        # signal with code and set up the state info, 
+        #see: https://stackoverflow.com/questions/8649233/threading-it-is-not-safe-to-use-pixmaps-outside-the-gui-thread
+        # BTW the idea is to get the gui to display "Processing Result" and the end of day and "Complete" when finished and
+        # "Building Track Map" when displaying tracks, nice but it seems not easy!
+        #-----------------------------------------------------------------
+        #
+#        print "Test signals"
+#        self.connect_and_emit_trigger()
+        
+#        print "My window is: ", self.thewindow
+#        self.thewindow.floggerSetState("Processing", "blue")
+#        exit()
+        
         i = 0
         try:
             while settings.FLOGGER_RUN:
@@ -943,10 +969,10 @@ class flogger3(MyApp):
                 twilight = -6 * ephem.degree    # Defn of Twilight is: Centre of Sun is 6, 12, 18 degrees below horizon (civil, nautical, astronomical)
 
 
-                if sunset_test.is_sunset_now(location):
-                    print "New sunset test True"
-                else:
-                    print "New sunset test False"
+#                if sunset_test.is_sunset_now(location):
+#                  print "New sunset test True"
+#                else:
+#                    print "New sunset test False"
 #
 # Old way end
 # 
@@ -978,17 +1004,32 @@ class flogger3(MyApp):
 #
                     
 #                print "Run old daylight test" 
-                print "sun altitude is (degrees): ", sun.alt, "twilight altitude is: ", twilight   
-                if sun.alt > twilight:
-                    print "Is it light at Location? Yes", location, \
-                    " Ephem date is: ", ephem.Date(location.date), \
-                    " Next sunset at: ", location.next_setting(ephem.Sun())
-                else:
+#                print "sun altitude is (degrees): ", sun.alt, "twilight altitude is: ", twilight   
+#                if sun.alt > twilight:
+#                    print "Is it light at Location? Yes", location, \
+#                    " Ephem date is: ", ephem.Date(location.date), \
+#                    " Next sunset at: ", location.next_setting(ephem.Sun())
+#                else:
 #                    print "Is it light at Location? No", location, \
-                    print "Is it light at Location? No", \
-                    " Ephem date is: ", ephem.Date(location.date), \
-                    " Next sunrise at: ", location.next_rising(ephem.Sun())
+#                    print "Is it light at Location? No", \
+#                    " Ephem date is: ", ephem.Date(location.date), \
+#                    " Next sunrise at: ", location.next_rising(ephem.Sun())
+#                    process_log(cursor,db, settings)
+                
+                
+                if not check_sunset.is_sunset_now(location):
+                    print "Sun not set"
+                    #print "New way. Is it light at Location? Yes", location, \
+                    #" Ephem date is: ", ephem.Date(location.date), \
+                    #" Next sunset at: ", location.next_setting(ephem.Sun())
+                else:
+                    print "sun is set"
+#                    print "Is it light at Location? No", location, \
+                    #print "New way. Is it light at Location? No", \
+                    #" Ephem date is: ", ephem.Date(location.date), \
+                    #" Next sunrise at: ", location.next_rising(ephem.Sun())
                     process_log(cursor,db, settings)
+                    
                 
         #
         # Dump tracks from flights table as .gpx
@@ -1122,7 +1163,7 @@ class flogger3(MyApp):
                         # In live mode so use socket read
                         print "Read socket"
                         packet_str = sock_file.readline()
-#                        print "Raw APRS Packet: ", packet_str
+                        print "Raw APRS Packet: ", packet_str
         #                datafile.write(packet_str)
                     else:
                         # In test mode so file read

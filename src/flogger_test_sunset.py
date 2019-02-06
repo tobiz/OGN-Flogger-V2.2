@@ -16,32 +16,39 @@ import datetime
 class init_sunset_test():	
 	def __init__(self, location):	
 		#print "init check_sunset"
-		#self.sun = ephem.Sun()
-		self.twilight = -6 * ephem.degree
 		self.sunset_time = location.next_setting(ephem.Sun())
+		self.sunrise_time = location.previous_rising(ephem.Sun())
 		
 		self.sunset_datetime = self.sunset_time.datetime()
-		#print "Sunset as datetime: ", self.sunset_time.datetime()
+		self.sunrise_datetime = self.sunrise_time.datetime()
 		# Find sunset day
 		self.sunset_datetime = datetime.datetime.strptime(str(self.sunset_time.datetime()), "%Y-%m-%d %H:%M:%S.%f")
 		self.sunset_day = self.sunset_datetime.date()
-		#print "init sunset_day: ", self.sunset_day
+		# Find sunrise day
+		self.sunrise_datetime = datetime.datetime.strptime(str(self.sunrise_time.datetime()), "%Y-%m-%d %H:%M:%S.%f")
+		self.sunrise_day = self.sunrise_datetime.date()
 		return
 	
 	def is_sunset_now(self, location): 
 		print "In is_sunset_now function"  
-		datetime_now = datetime.datetime.now()
+		datetime_now = datetime.datetime.now() 
+		datetime_day = datetime_now.date()
 		#print "Datetime_now: ", datetime_now.date()
-		print "Current day is: ", datetime_now.date(), " Sunset_day is: ", self.sunset_day, " Sunset time is: ", self.sunset_datetime
-		if self.sunset_day > datetime_now.date():
-			print "Sunset day is tomorrow, must be set today"
-			return True
-		if datetime_now < self.sunset_datetime:
-			print "Sun not set"
-			return False
+		print "Current daytime is: ", datetime_now, \
+		" Sunset_day is: ", self.sunset_day, \
+		" Sunset time is: ", self.sunset_datetime, \
+		" Sunrise day is: ", self.sunrise_day
+		if self.sunrise_day == datetime_day and self.sunset_day == datetime_day:
+			# Sunrise and sunset on same day
+			if datetime_now < self.sunset_datetime:
+				#print "Sun not set"
+				return False
+			else:
+				#print "Sun is set"
+				return True
 		else:
-			print "Sun is set"
 			return True
+		
 
 #location = ephem.Observer()        
 #location.lat = str(54.2289592)

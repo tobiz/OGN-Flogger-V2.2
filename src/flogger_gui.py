@@ -157,42 +157,20 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         print "init MyApp"
         QtGui.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
-#        Ui_AboutWindow.__init__(self)
-
-
-
         # checkbox scroll area, gives scrollable view on widget
         scroll = QtGui.QScrollArea()
         scroll.setMinimumWidth(120)
         scroll.setMinimumHeight(200) # would be better if resizable
         scroll.setWidgetResizable(True)
         scroll.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)         
-#        scroll.setWidget(QtGui)
-        
-#        self.Iconlabel.setPixmap(pixmap)
-#        self.iconlabel.show()
+        scroll.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)  
         self.show()
-        
-        
         self.setupUi(self)
         global settings
         settings = class_settings()
         
         self.actionAbout.triggered.connect(self.AboutButton)
-        self.actionHelp_2.triggered.connect(self.HelpButton)
-#        self.actionHelp_2.triggered.connect(self.EditButton)
-
-        
-#        self.RunningLabel.setText("Stopped")
-
-#        self.iconpath = os.path.join(path, "../data/flogger_icon-08.png")
-#        self.iconpath = path_join_dd(os.path.abspath(__file__),["data", "flogger_icon-08.png"])
-#        print "Icon path: ", self.iconpath
-#        self.setWindowIcon(QtGui.QIcon(self.iconpath))
-#        self.pixmap = QPixmap(self.iconpath)
-#        self.Iconlabel.setPixmap(self.pixmap) 
-        
+        self.actionHelp_2.triggered.connect(self.HelpButton)   
         self.actionStart.triggered.connect(self.floggerStart)  
         self.actionStop.triggered.connect(self.floggerStop)  
         self.actionQuit.triggered.connect(self.floggerQuit)  
@@ -221,21 +199,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.FlightLogTable.doubleClicked.connect(self.floggerFlightLogDoubleClicked)
         self.FlightLogTable.verticalHeader().sectionClicked.connect(self.floggerFlightLogDoubleClicked)  
         self.FlightLogTable.setColumnHidden(10, True)
-
-
-        
-        
         # Initialise values from config file
 
-#        filepath = os.path.join(path, "flogger_settings.py")
         filepath = os.path.join(path, "flogger_settings_file.txt")
-
-#        filename = open(filepath)
         try:
-#            self.config = ConfigObj("flogger_settings_file.txt", raise_errors = True)
             settings_file_dot_txt = path_join_dd(os.path.abspath(__file__), ["data", "flogger_settings_file.txt"])
             self.config = ConfigObj(settings_file_dot_txt, raise_errors = True)
-#            self.config = ConfigObj("../data/flogger_settings_file.txt", raise_errors = True)
             print "Opened flogger_settings_file.txt path:", settings_file_dot_txt
         except:
             print "Open failed"
@@ -529,9 +498,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         flogger = flogger3()
         self.RunningLabel.setStyleSheet("color: green")
         self.RunningLabel.setText("Running...")
-#        self.RunningProgressBar.maximum(0)
         self.RunningProgressBar.setProperty("maximum", 0) 
-        flogger.flogger_run(settings)
+#1        flogger.flogger_run(settings)
+        flogger.flogger_run(settings, flogger)
         
         
     def floggerStop(self):
@@ -543,6 +512,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     
     def floggerQuit(self):
         print "flogger quit"
+        
+    def floggerSetState(self, stateTxt, colour):
+        print "flogger set state: ", stateTxt, " ", colour 
+        self.RunningLabel.setStyleSheet("color: " + colour)
+        self.RunningLabel.setText(stateTxt)
+        self.RunningProgressBar.setProperty("maximum", 1)
+        
 
 #
 # Action Config Menu Bar
