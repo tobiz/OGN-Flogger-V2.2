@@ -1,0 +1,28 @@
+
+from geopy import distance 
+import sqlite3
+
+def release_height(cursor, tug_flight_no, glider_flight_no, settings)
+	cursor.execute('''SELECT flight_no, stime, longitude, latitude, altitude FROM tracks ORDER by stime \
+							WHERE flight_no=?''', tug_flight_no)
+	tug_track = cursor.fetchall()
+	cursor.execute('''SELECT flight_no, stime, longitude, latitude FROM tracks ORDER by stime \
+							WHERE flight_no=?''', glider_flight_no)
+	for track_point in tug_track: 
+		tug_coords = (track_point[2], track_point[3)])
+		glider_point = cursor.fetchone()		# Fetches the next row of the SELECT
+		glider_coords = (glider_point[2], glider_point[3)])
+		separation = distance.distance(tug_coords, glider_coords).meters
+		if separation < settings.FLOGGER_RELEASE_SEPARATION:
+			continue
+		else:
+			# Found the first one in time sequence that has greater separation
+			launch_height = track_point[4]
+			print "Launch height is: ", launch_height
+	return launch_height
+				
+				
+				
+			
+			
+	
