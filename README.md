@@ -40,7 +40,7 @@ To run Flogger once installed run "flogger_gui.py". This starts the system displ
 
 You will need to set up your own values for the "APRS Setup" tab fields, in particular the "APRS Usernams" and "APRS Passcode" fields. "APRS Server Host" and "APRS Server Port" can be left. The "APRSBase Station" fields should be set to your required values, there need only be 1 but more gives a better result.
 
-"APRS Usernams" and "APRS Passcode" can be created on http://http://www.george-smart.co.uk/wiki/APRS_Callpass
+"APRS Usernams" and "APRS Passcode" can be created on http://www.george-smart.co.uk/wiki/APRS_Callpass
 If a valid username and passcode are not suppled it will exit immediately.
 
 After that go through each tab providing your values. Airfield Lat/Lon do not have to be supplied if "Airfield Details" is supplied as a valid airfield name, if it is, the Lat/Lon and QNH are taken from a database.
