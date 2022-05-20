@@ -1,6 +1,6 @@
 # OGN-Flogger-V2.2
 
-# NOTE. NEW VERSION FOR PYTHON3 * PYQT5
+# NOTE. NEW VERSION FOR PYTHON3 and PYQT5
 I'm preparing a new version converting from Python 2.7 to Python 3.  This has resulted in some changes to the PyQT5 code. This is still work in progress as of 2022/05/20.
 
 Glider flight logging and tracking
